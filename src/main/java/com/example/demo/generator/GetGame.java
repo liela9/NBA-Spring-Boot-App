@@ -1,5 +1,6 @@
-package com.example.demo.getgamesapi;
+package com.example.demo.generator;
 
+import com.example.demo.team.Team;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.ToString;

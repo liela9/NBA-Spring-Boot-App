@@ -18,6 +18,13 @@ public class GameService {
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
+
+    public List<Game> getAllGames(String filterText) {
+        if (filterText == null || filterText.isEmpty())
+            return gameRepository.findAll();
+
+        return gameRepository.search(filterText);
+    }
     public Game getGameById(Long gameId) {
         return gameRepository.findGameById(gameId);
     }

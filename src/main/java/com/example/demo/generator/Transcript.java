@@ -1,6 +1,5 @@
-package com.example.demo.getgamesapi;
+package com.example.demo.generator;
 
-import com.example.demo.game.Game;
 import lombok.Getter;
 
 import java.util.List;

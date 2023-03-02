@@ -3,6 +3,7 @@ package com.example.demo.views;
 import com.example.demo.game.Game;
 import com.example.demo.input.MyInput;
 import com.example.demo.input.MyInputService;
+import com.example.demo.team.TeamService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,6 +20,7 @@ import java.util.Collections;
 @PermitAll
 public class MyInputsView extends VerticalLayout {
     private MyInputService myInputService;
+    private TeamService teamService;
     Grid grid = new Grid<>(MyInput.class);
     InputForm form;
 
@@ -31,6 +33,7 @@ public class MyInputsView extends VerticalLayout {
 
         //TODO: Add tool bar
         add(getContent());
+
     }
 
     private void getMyInputs(){
@@ -38,11 +41,10 @@ public class MyInputsView extends VerticalLayout {
         grid.setItems(myInputService.getInputsByUser(username));
         //TODO: Test it
         grid.setColumns("date", "homeTeam", "visitorTeam", "fee", "user");
-
     }
 
     private void configureForm(){
-        form = new InputForm(Collections.emptyList());
+        form = new InputForm(teamService.getAllTeams());
         form.setWidth("25em");
     }
 
@@ -55,4 +57,5 @@ public class MyInputsView extends VerticalLayout {
 
         return content;
     }
+
 }

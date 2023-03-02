@@ -3,12 +3,13 @@ package com.example.demo.views;
 
 import com.example.demo.game.Game;
 import com.example.demo.game.GameService;
-import com.example.demo.getgamesapi.Transcript;
-import com.example.demo.security.SecurityService;
+import com.example.demo.generator.Transcript;
 import com.google.gson.Gson;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -25,6 +26,8 @@ import java.net.http.HttpResponse;
 @PermitAll
 public class AllGamesView extends VerticalLayout {
     private GameService gameService;
+    Grid grid = new Grid<>(Game.class);
+    TextField filterText = new TextField();
 
     public AllGamesView(GameService gameService){
         this.gameService = gameService;
@@ -32,17 +35,17 @@ public class AllGamesView extends VerticalLayout {
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 
         initDB();
-
-        Grid grid = new Grid<>(Game.class);
+        configureFilterText();
         grid.setItems(gameService.getAllGames());
         grid.setColumns("date", "homeTeam", "visitorTeam");
 
-        add(grid);
+        add(filterText, grid);
 
 //        for (int i = 1; i < 10; i++) {
 //            System.out.println(gameService.getGameById(Long.valueOf(i)));
 //        }
 
+        updateList();
     }
 
     private void initDB() {
@@ -78,5 +81,16 @@ public class AllGamesView extends VerticalLayout {
             e.printStackTrace();
         }
         return response.body();
+    }
+
+    private void configureFilterText() {
+        filterText.setPlaceholder("Filter...");
+        filterText.setClearButtonVisible(true);
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(e -> updateList());
+    }
+
+    private void updateList() {
+        grid.setItems(gameService.getAllGames(filterText.getValue()));
     }
 }

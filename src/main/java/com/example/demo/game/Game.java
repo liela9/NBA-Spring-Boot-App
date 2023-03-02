@@ -10,7 +10,6 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table
 public class Game {

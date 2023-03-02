@@ -1,6 +1,6 @@
 package com.example.demo.views;
 
-import com.example.demo.getgamesapi.Team;
+import com.example.demo.team.Team;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
