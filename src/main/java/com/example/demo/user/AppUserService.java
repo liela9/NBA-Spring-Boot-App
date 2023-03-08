@@ -12,19 +12,6 @@ public class AppUserService {
     @Autowired
     private final AppUserRepository appUserRepository;
 
-//    public AppUser register(RegistrationRequest request){
-//        AppUser user = new AppUser();
-//        user.setEmail(request.getEmail());
-//        user.setFullName(request.getFullName());
-//        user.setUserName(request.getUserName());
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
-//        user.setBirthYear(request.getBirthYear());
-//        user.setRole(AppUserRole.USER);
-//
-//        appUserRepository.save(user);
-//        return user;
-//    }
-
     public List<AppUser> getAllUsers(){
         return appUserRepository.findAll();
     }

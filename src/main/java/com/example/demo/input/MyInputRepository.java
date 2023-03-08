@@ -1,7 +1,10 @@
 package com.example.demo.input;
 
+import com.example.demo.game.Game;
+import com.example.demo.user.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,8 +14,8 @@ public interface MyInputRepository extends JpaRepository<MyInput, Long> {
     @Query("SELECT i FROM MyInput i WHERE i.inputId = ?1")
     MyInput findInputById(Long id);
 
-    @Query("SELECT i FROM MyInput i WHERE i.user = ?1")
-    List<MyInput> findInputsByUser(String email);
+    @Query("SELECT i FROM MyInput i WHERE i.email = ?1")
+    List<MyInput> findInputsByEmail(String email);
 
     @Query("SELECT i FROM MyInput i WHERE i.date = ?1")
     List<MyInput> findInputByDate(String date);
@@ -25,4 +28,10 @@ public interface MyInputRepository extends JpaRepository<MyInput, Long> {
 
     @Query("SELECT i FROM MyInput i WHERE i.fee = ?1")
     List<MyInput> findInputByFee(double fee);
+
+    @Query("select i from MyInput i " +
+            "where lower(i.homeTeam) like lower(concat('%', :searchTerm, '%')) " +
+            "or lower(i.visitorTeam) like lower(concat('%', :searchTerm, '%'))" +
+            "or lower(i.date) like lower(concat('%', :searchTerm, '%'))")
+    List<MyInput> search(@Param("searchTerm") String searchTerm);
 }

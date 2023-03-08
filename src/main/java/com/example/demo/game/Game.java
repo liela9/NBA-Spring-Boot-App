@@ -14,15 +14,7 @@ import javax.persistence.*;
 @Table
 public class Game {
     @Id
-    @SequenceGenerator(
-            name = "game_sequence",
-            sequenceName = "game_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "game_sequence"
-    )
+    @GeneratedValue
     @Column(name = "game_id")
     private Long gameId;
 

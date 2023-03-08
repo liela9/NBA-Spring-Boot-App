@@ -1,13 +1,18 @@
 package com.example.demo.input;
 
+import com.example.demo.team.Team;
 import com.example.demo.user.AppUser;
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @ToString
 @NoArgsConstructor
@@ -16,40 +21,43 @@ import javax.validation.constraints.Email;
 @Entity
 @Table
 public class MyInput {
+
     @Id
-    @SequenceGenerator(
-            name = "input_sequence",
-            sequenceName = "input_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "input_sequence"
-    )
+    @GeneratedValue
+    @SerializedName("input_id")
     @Column(name = "input_id")
     private Long inputId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_email", nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name = "user_email", nullable = false)
+//    @NotNull
+//    private AppUser user;
+
     @Email
-    private AppUser user;
+    @NotEmpty
+    private String email = "";
 
-    @Column(name = "date")
-    private String date;
+    @NotEmpty
+    private String date = "";
 
-    @Column(name = "home_team")
-    private String homeTeam;
+    @ManyToOne
+    @JoinColumn(name = "home_team_id")
+    @NotNull
+    private Team homeTeam;
 
-    @Column(name = "visitor_team")
-    private String visitorTeam;
+    @ManyToOne
+    @JoinColumn(name = "visitor_team_id")
+    @NotNull
+    private Team visitorTeam;
 
-    @Column(name = "fee")
+    @NotNull
     private double fee;
 
-    public MyInput(String date, String homeTeam, String visitorTeam, double fee) {
+    public MyInput(String date, Team homeTeam, Team visitorTeam, double fee) {
         this.date = date;
         this.homeTeam = homeTeam;
         this.visitorTeam = visitorTeam;
         this.fee = fee;
     }
+
 }

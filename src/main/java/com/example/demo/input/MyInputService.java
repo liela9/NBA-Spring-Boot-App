@@ -1,5 +1,6 @@
 package com.example.demo.input;
 
+import com.example.demo.user.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,23 @@ public class MyInputService {
     public List<MyInput> getAllInputs() {
         return myInputRepository.findAll();
     }
-    public List<MyInput> getInputsByUser(String email) {
-        return myInputRepository.findInputsByUser(email);
+    public List<MyInput> getAllInputs(String filterText) {
+        if (filterText == null || filterText.isEmpty())
+            return myInputRepository.findAll();
+
+        return myInputRepository.search(filterText);
+    }
+    public List<MyInput> getInputsByUser(AppUser user) {
+        return myInputRepository.findInputsByEmail(user.getEmail());
     }
     public void addNewInput(MyInput input) {
+        if (input == null){
+            System.err.println("Input is null");
+            return;
+        }
         myInputRepository.save(input);
+    }
+    public void deleteInput(MyInput input){
+        myInputRepository.delete(input);
     }
 }

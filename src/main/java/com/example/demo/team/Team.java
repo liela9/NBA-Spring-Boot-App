@@ -1,11 +1,14 @@
 package com.example.demo.team;
 
+import com.example.demo.input.MyInput;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,18 +18,24 @@ import javax.persistence.*;
 public class Team {
 
     @Id
-    @SequenceGenerator(
-            name = "team_sequence",
-            sequenceName = "team_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "team_sequence"
-    )
+    @GeneratedValue
+    @SerializedName("team_id")
     @Column(name = "team_id")
-    private Integer teamId;
+    private Long teamId;
+
     @SerializedName("full_name")
     @Column(name = "full_name")
     private String fullName;
+
+    @OneToMany(mappedBy = "homeTeam")
+    @Nullable
+    private List<MyInput> homeInputs;
+
+    @OneToMany(mappedBy = "visitorTeam")
+    @Nullable
+    private List<MyInput> visitorInputs;
+
+    public Team(String fullName){
+        this.fullName = fullName;
+    }
 }

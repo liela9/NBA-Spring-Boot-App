@@ -1,6 +1,7 @@
 package com.example.demo.user;
 
 import com.example.demo.input.MyInput;
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.time.Year;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 
@@ -24,39 +25,34 @@ import java.util.List;
 )
 public class AppUser {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @GeneratedValue
+    @SerializedName("user_id")
     @Column(updatable = false)
     private Long userId;
 
-    @Column(name = "email")
     @Email
-    private String email;
+    @NotEmpty
+    private String email = "";
 
+    @SerializedName("full_name")
     @Column(name = "full_name")
-    private String fullName;
+    @NotEmpty
+    private String fullName = "";
 
     @Column(length = 100)
-    private String password;
+    private String password = "";
 
-    @Column(name = "birth_year")
-    private Year birthYear;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany
+    @SerializedName("my_inputs")
+    @Column(name = "my_inputs")
     private List<MyInput> myInputs;
-
-//    @Enumerated(EnumType.STRING)
-//    private AppUserRole role;
-    //TODO: needed?
 
     public AppUser(String email,
                    String fullName,
-                   String password,
-                   Year birthYear) {
+                   String password) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
-        this.birthYear = birthYear;
     }
 
     public String getUsername() {

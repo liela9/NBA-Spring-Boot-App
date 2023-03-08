@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("SELECT t FROM Team t WHERE t.fullName = ?1")
-    Game findTeamByName(String fullName);
+    Team findTeamByName(String fullName);
+
+    @Query("SELECT t FROM Team t WHERE t.teamId = ?1")
+    Team findTeamById(Long teamId);
 }
