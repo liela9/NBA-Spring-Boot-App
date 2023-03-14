@@ -30,8 +30,11 @@ public interface MyInputRepository extends JpaRepository<MyInput, Long> {
     List<MyInput> findInputByFee(double fee);
 
     @Query("select i from MyInput i " +
-            "where lower(i.homeTeam) like lower(concat('%', :searchTerm, '%')) " +
-            "or lower(i.visitorTeam) like lower(concat('%', :searchTerm, '%'))" +
-            "or lower(i.date) like lower(concat('%', :searchTerm, '%'))")
-    List<MyInput> search(@Param("searchTerm") String searchTerm);
+            "where i.email = :email " +
+            "and( " +
+                "lower(i.homeTeam) like lower(concat('%', :searchTerm, '%')) " +
+                "or lower(i.visitorTeam) like lower(concat('%', :searchTerm, '%'))" +
+                "or lower(i.date) like lower(concat('%', :searchTerm, '%'))" +
+            ")")
+    List<MyInput> search(@Param("email") String email, @Param("searchTerm") String searchTerm);
 }

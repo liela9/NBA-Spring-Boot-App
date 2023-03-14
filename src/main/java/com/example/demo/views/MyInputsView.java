@@ -3,6 +3,7 @@ package com.example.demo.views;
 import com.example.demo.input.MyInput;
 import com.example.demo.input.MyInputService;
 import com.example.demo.security.SecurityService;
+import com.example.demo.team.Team;
 import com.example.demo.team.TeamService;
 import com.example.demo.user.AppUser;
 import com.example.demo.user.AppUserService;
@@ -18,6 +19,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.context.annotation.Scope;
 
 import javax.annotation.security.PermitAll;
+import java.util.ArrayList;
+import java.util.List;
 
 @org.springframework.stereotype.Component
 @Scope("prototype")
@@ -56,7 +59,6 @@ public class MyInputsView extends VerticalLayout {
                 getContent());
 
         updateList();
-//        closeEditor();
     }
 
     private void closeEditor() {
@@ -94,7 +96,13 @@ public class MyInputsView extends VerticalLayout {
     }
 
     private void configureForm(){
-        form = new InputForm(teamService.getAllTeams());
+        List<Team> teams = teamService.getAllTeams();
+        List<String> teamsNames = new ArrayList<>();
+        for (int i = 0; i < teams.size(); ++i) {
+            teamsNames.add(teams.get(i).getFullName());
+        }
+
+        form = new InputForm(teamsNames);
         form.setWidth("25em");
         form.addListener(InputForm.SaveEvent.class, this::saveInput);
         form.addListener(InputForm.DeleteEvent.class, this::deleteInput);
@@ -102,7 +110,11 @@ public class MyInputsView extends VerticalLayout {
     }
 
     private void saveInput(InputForm.SaveEvent event) {
-        myInputService.addNewInput(event.getInput());
+        try {
+            myInputService.addNewInput(event.getInput());
+        } catch (Exception e){}
+
+        userEmail = event.getInput().getEmail();
         updateList();
         closeEditor();
     }
@@ -122,12 +134,15 @@ public class MyInputsView extends VerticalLayout {
         Button addInputBtn = new Button("Add input");
         addInputBtn.addClickListener(e -> addInput());
 
-        emailText.setPlaceholder("Your email...");
+        emailText.setPlaceholder("Enter email to see your inputs");
 
         Button yourEmailBtn = new Button("Enter email");
-        yourEmailBtn.addClickListener(e -> userEmail = emailText.getValue());
+        yourEmailBtn.addClickListener(e -> {
+            userEmail = emailText.getValue();
+            updateList();
+        });
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addInputBtn, emailText, yourEmailBtn);
+        HorizontalLayout toolbar = new HorizontalLayout(emailText, yourEmailBtn, filterText, addInputBtn);
         toolbar.addClassName("toolbar");
         return toolbar;
     }
@@ -136,7 +151,6 @@ public class MyInputsView extends VerticalLayout {
         grid.asSingleSelect().clear();
         editInput(new MyInput());
     }
-
 
     //Content:  grid of user inputs
     //          form for adding new input
@@ -151,7 +165,6 @@ public class MyInputsView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(myInputService.getAllInputs(filterText.getValue()));
+        grid.setItems(myInputService.getAllInputs(userEmail, filterText.getValue()));
     }
-
 }

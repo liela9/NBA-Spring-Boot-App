@@ -28,7 +28,13 @@ public class GameService {
     public Game getGameById(Long gameId) {
         return gameRepository.findGameById(gameId);
     }
+    public List<Game> getGameByHomeTeam(String homeTeam){
+        return gameRepository.findGameByHomeTeam(homeTeam);
+    }
     public void addNewGame(Game game) {
         gameRepository.save(game);
     }
+
+
+
 }

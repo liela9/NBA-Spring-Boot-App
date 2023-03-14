@@ -2,7 +2,6 @@ package com.example.demo.views;
 
 import com.example.demo.input.MyInput;
 import com.example.demo.team.Team;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -21,28 +20,25 @@ import com.vaadin.flow.shared.Registration;
 import java.util.List;
 
 public class InputForm extends FormLayout {
-    private MyInput input;
+    private MyInput input = new MyInput();
 
     EmailField email = new EmailField("Email");
     TextField fee = new TextField("Fee");
     TextField date = new TextField("Date");
-    ComboBox<Team> homeTeam = new ComboBox<>("Home team");
-    ComboBox<Team> visitorTeam = new ComboBox<>("Visitor team");
+    ComboBox<String> homeTeam = new ComboBox<>("Home team");
+    ComboBox<String> visitorTeam = new ComboBox<>("Visitor team");
     Binder<MyInput> binder = new BeanValidationBinder<>(MyInput.class);
 
     Button save =  new Button("Save");
     Button delete =  new Button("Delete");
     Button cancel =  new Button("Cancel");
 
-    public InputForm(List<Team> teams){
+    public InputForm(List<String> teams){
         addClassName("input-form");
         binder.bindInstanceFields(this);
 
         homeTeam.setItems(teams);
-        homeTeam.setItemLabelGenerator(Team::getFullName);
-
         visitorTeam.setItems(teams);
-        visitorTeam.setItemLabelGenerator(Team::getFullName);
 
         add(
                 email,
@@ -85,7 +81,7 @@ public class InputForm extends FormLayout {
         }
     }
 
-    // Events
+    //Events
     public static abstract class InputFormEvent extends ComponentEvent<InputForm> {
         private MyInput input;
 
